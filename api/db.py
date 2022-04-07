@@ -10,10 +10,13 @@ import csv
 
 engine = create_engine('postgresql+psycopg2://postgres:Testing123@dbservice:5432/postgres')
 conn = engine.connect()
-conn.execute("commit")
-conn.execute("create database test")
-conn.execute("commit")
-conn.close()
+try:
+    conn.execute("CREATE database IF NOT EXISTS test1")
+    conn.execute("commit")
+except Exception as e:
+    print(e)
+finally:
+    conn.close()
 
 # copy csv to postgres
 conn = psycopg2.connect(database="test", user="postgres", password="Testing123", host="dbservice", port="5432")
